@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0d0e15">
+  <title>Graviton: Orbital Drift</title>
+  
+  <!-- SEO & Social Sharing -->
+  <meta name="description" content="An immersive cosmic slingshot game. Tap and hold to enter orbits, release to drift, and navigate through the neon space. Optimized for mobile and iPhone Pro Max.">
+  <meta property="og:title" content="Graviton: Orbital Drift">
+  <meta property="og:description" content="Navigate deep space using gravitational slingshots. Beautiful neon aesthetics and synthetic soundscapes.">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Safe Area Wrapper for HUD and Overlays -->
+  <div class="safe-area-container">
+    
+    <!-- Game HUD -->
+    <header class="game-hud" id="game-hud">
+      <div class="hud-left">
+        <div class="hud-stat">
+          <span class="label">SCORE</span>
+          <span class="value" id="current-score">0000</span>
+        </div>
+      </div>
+      
+      <div class="hud-right">
+        <button class="hud-btn" id="sound-btn" aria-label="Toggle Sound" title="Toggle Sound">
+          <svg id="sound-on-icon" viewBox="0 0 24 24" width="24" height="24">
+            <path fill="currentColor" d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77zm-3 0L5.5 8H2v8h3.5L11 20.77V3.23zM14 8.5v7c1.48-.65 2.5-2.14 2.5-3.75s-1.02-3.1-2.5-3.75z"/>
+          </svg>
+          <svg id="sound-off-icon" viewBox="0 0 24 24" width="24" height="24" class="hidden">
+            <path fill="currentColor" d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+          </svg>
+        </button>
+        <button class="hud-btn" id="pause-btn" aria-label="Pause Game" title="Pause Game">
+          <svg viewBox="0 0 24 24" width="24" height="24">
+            <path fill="currentColor" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Menu Overlay -->
+    <section class="overlay active" id="menu-overlay">
+      <div class="glass-panel">
+        <h1 class="game-title">GRAVITON</h1>
+        <p class="game-subtitle">ORBITAL DRIFT</p>
+        
+        <div class="instructions">
+          <div class="instruction-item">
+            <div class="touch-icon">
+              <span class="pulse-ring"></span>
+              <span class="finger"></span>
+            </div>
+            <div class="instruction-text">
+              <strong>Tap & Hold</strong> to lock onto gravity wells and enter orbit.
+            </div>
+          </div>
+          <div class="instruction-item">
+            <div class="release-icon">
+              <span class="arrow-up"></span>
+            </div>
+            <div class="instruction-text">
+              <strong>Release</strong> to break gravity and slingshot forward.
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-panel">
+          <span class="label">PERSONAL BEST</span>
+          <span class="value" id="menu-high-score">0000</span>
+        </div>
+
+        <button class="btn btn-primary" id="play-btn">LAUNCH MISSION</button>
+      </div>
+    </section>
+
+    <!-- Pause Overlay -->
+    <section class="overlay" id="pause-overlay">
+      <div class="glass-panel">
+        <h2 class="overlay-title">SYSTEM PAUSED</h2>
+        <p class="overlay-desc">Orbital stabilizer engaged.</p>
+        
+        <div class="btn-group">
+          <button class="btn btn-primary" id="resume-btn">RESUME DRIFT</button>
+          <button class="btn btn-secondary" id="restart-from-pause-btn">RESTART</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Game Over Overlay -->
+    <section class="overlay" id="game-over-overlay">
+      <div class="glass-panel">
+        <div class="game-over-badge">MISSION FAILED</div>
+        <h2 class="overlay-title score-alert" id="game-over-title">CRITICAL COLLISION</h2>
+        
+        <div class="final-stats">
+          <div class="stat-box">
+            <span class="label">FINAL SCORE</span>
+            <span class="value highlight" id="final-score">0000</span>
+          </div>
+          <div class="stat-box">
+            <span class="label">BEST SCORE</span>
+            <span class="value" id="game-over-high-score">0000</span>
+          </div>
+        </div>
+        
+        <div class="new-highscore-banner hidden" id="highscore-banner">
+          <span>★ NEW RECORD ESTABLISHED ★</span>
+        </div>
+
+        <button class="btn btn-primary btn-pulse" id="restart-btn">REINITIALIZE</button>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Game Canvas -->
+  <canvas id="game-canvas"></canvas>
+
+  <!-- Service/Audio Synth Scripts -->
+  <script src="game.js"></script>
+</body>
+</html>
